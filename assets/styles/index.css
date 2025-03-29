@@ -471,10 +471,16 @@ header.scrolled nav a.active {
 	text-align: center;
 }
 
-.why-choose-us h1 {
-	margin-bottom: 50px;
-	font-size: 2.3rem;
+.why-choose-us h2 {
+	margin-bottom: 20px;
+	font-size: 2.5rem;
 	position: relative;
+}
+
+.why-choose-us p {
+	max-width: 1000px;
+	margin: 0 auto;
+	color: #7f8c8d;
 }
 
 .core-values-container {
