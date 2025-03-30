@@ -5,7 +5,7 @@
 		<meta charset="UTF-8" />
 		<meta
 			name="viewport"
-			content="width=device-width, initial-scale=1.0"
+			content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
 		/>
 		<link
 			rel="stylesheet"
@@ -526,7 +526,192 @@
 			</div>
 		</section>
 
+		<section
+			id="contact"
+			class="contact"
+		>
+			<div class="container">
+				<div class="section-title">
+					<h2>Contact Us</h2>
+					<p>Get in touch with us for inquiries, admissions information, or to schedule a campus visit.</p>
+				</div>
+
+				<div class="contact-container">
+					<!-- Contact Information -->
+					<div class="contact-info">
+						<div class="contact-card">
+							<i class="fas fa-map-marker-alt"></i>
+							<div class="contact-details">
+								<h3>Our Location</h3>
+								<p>No 2, Old 88, Victorino 1, S Ipil, Marikina, 1810 Metro Manila, Philippines</p>
+							</div>
+						</div>
+
+						<div class="contact-card">
+							<i class="fas fa-phone-alt"></i>
+							<div class="contact-details">
+								<h3>Call Us</h3>
+								<p>(02) 87257578</p>
+								<p>+63 995 723 4147</p>
+							</div>
+						</div>
+
+						<div class="contact-card">
+							<i class="fas fa-envelope"></i>
+							<div class="contact-details">
+								<h3>Email Us</h3>
+								<p>info@digitalartstech.edu.ph</p>
+							</div>
+						</div>
+
+						<div class="contact-card">
+							<i class="fas fa-clock"></i>
+							<div class="contact-details">
+								<h3>Office Hours</h3>
+								<p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+							</div>
+						</div>
+
+						<div class="social-media">
+							<h3>Connect With Us</h3>
+							<div class="social-icons">
+								<a
+									href="https://www.facebook.com/DigitalArts01"
+									target="_blank"
+								>
+									<i class="fab fa-facebook-f"></i>
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Contact Form -->
+					<div class="contact-form-container">
+						<h3>Request Information</h3>
+						<p>Fill out the form below and our admissions team will contact you shortly.</p>
+
+						<form
+							class="contact-form"
+							id="contactForm"
+						>
+							<div class="form-row">
+								<div class="form-group">
+									<label for="name">
+										Full Name
+										<span class="required">*</span>
+									</label>
+									<input
+										type="text"
+										id="name"
+										name="name"
+										required
+									/>
+								</div>
+
+								<div class="form-group">
+									<label for="email">
+										Email Address
+										<span class="required">*</span>
+									</label>
+									<input
+										type="email"
+										id="email"
+										name="email"
+										required
+									/>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="form-group">
+									<label for="phone">
+										Phone Number
+										<span class="required">*</span>
+									</label>
+									<input
+										type="tel"
+										id="phone"
+										name="phone"
+										required
+									/>
+								</div>
+
+								<div class="form-group">
+									<label for="program">Program of Interest</label>
+									<select
+										id="program"
+										name="program"
+									>
+										<option value="">Select a Program</option>
+										<option value="2D Animation">2D Animation NCIII</option>
+										<option value="Contact Center">Contact Center Services NCII</option>
+										<option value="Java Programming">Programming (Java) NCIII</option>
+										<option value="Stenography">Stenography</option>
+										<option value="Adobe Photoshop">Adobe Photoshop</option>
+										<option value="Video Graphics">Video Graphics</option>
+										<option value="Other">Other</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label for="message">
+									Message
+									<span class="required">*</span>
+								</label>
+								<textarea
+									id="message"
+									name="message"
+									rows="5"
+									required
+								></textarea>
+							</div>
+
+							<div class="form-group">
+								<button
+									type="submit"
+									class="btn submit-btn"
+								>
+									<i class="fas fa-paper-plane"></i>
+									Send Message
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<!-- Map Section -->
+				<div class="map-container">
+					<h3>Find Us</h3>
+					<div class="map">
+						<iframe
+							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.169946539484!2d121.11624887341179!3d14.646292485845454!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397b9ef5c65682d%3A0x43666ac21fa891f8!2sDigital%20Arts%20Technology%20Training%20Center%20Inc.!5e0!3m2!1sen!2sph!4v1743348757575!5m2!1sen!2sph"
+							width="600"
+							height="450"
+							style="border: 0"
+							allowfullscreen=""
+							loading="lazy"
+							referrerpolicy="no-referrer-when-downgrade"
+						></iframe>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<footer class="footer">
+			<div class="container">
+				<div class="footer-content">
+					<div class="footer-text">
+						<p>&copy; 2025 Digital Arts Technology Training Center Inc. All rights reserved.</p>
+					</div>
+				</div>
+			</div>
+		</footer>
+
 		<script src="js/parallax.js"></script>
-		<script src="js/script.js"></script>
+		<script
+			type="module"
+			src="js/script.js"
+		></script>
 	</body>
 </html>
