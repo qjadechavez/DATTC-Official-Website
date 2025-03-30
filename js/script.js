@@ -81,4 +81,127 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		});
 	});
+
+	// Enhanced Gallery lightbox functionality with navigation
+	const galleryItems = document.querySelectorAll(".gallery-item");
+
+	if (galleryItems.length > 0) {
+		// Create lightbox element
+		const lightbox = document.createElement("div");
+		lightbox.className = "gallery-lightbox";
+
+		const lightboxContent = document.createElement("div");
+		lightboxContent.className = "lightbox-content";
+
+		const lightboxImage = document.createElement("img");
+
+		// Navigation buttons
+		const prevButton = document.createElement("div");
+		prevButton.className = "lightbox-prev";
+		prevButton.innerHTML = '<i class="fas fa-chevron-left"></i>';
+
+		const nextButton = document.createElement("div");
+		nextButton.className = "lightbox-next";
+		nextButton.innerHTML = '<i class="fas fa-chevron-right"></i>';
+
+		const closeButton = document.createElement("div");
+		closeButton.className = "lightbox-close";
+		closeButton.innerHTML = "&times;";
+
+		lightboxContent.appendChild(lightboxImage);
+		lightbox.appendChild(closeButton);
+		lightbox.appendChild(prevButton);
+		lightbox.appendChild(nextButton);
+		lightbox.appendChild(lightboxContent);
+		document.body.appendChild(lightbox);
+
+		let currentIndex = 0;
+
+		// Function to update lightbox with current image
+		function updateLightbox(index) {
+			currentIndex = index;
+			const imgSrc = galleryItems[index].querySelector("img").src;
+			const imgAlt = galleryItems[index].querySelector("img").alt;
+
+			lightboxImage.src = imgSrc;
+			lightboxImage.alt = imgAlt;
+		}
+
+		// Add click event to gallery items
+		galleryItems.forEach((item, index) => {
+			item.addEventListener("click", function () {
+				updateLightbox(index);
+				lightbox.classList.add("active");
+				document.body.style.overflow = "hidden";
+			});
+		});
+
+		// Navigation functions
+		function showPrevImage() {
+			currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+			updateLightbox(currentIndex);
+		}
+
+		function showNextImage() {
+			currentIndex = (currentIndex + 1) % galleryItems.length;
+			updateLightbox(currentIndex);
+		}
+
+		prevButton.addEventListener("click", showPrevImage);
+		nextButton.addEventListener("click", showNextImage);
+
+		// Close lightbox on click
+		closeButton.addEventListener("click", function () {
+			lightbox.classList.remove("active");
+			document.body.style.overflow = "auto";
+		});
+
+		// Also close on background click
+		lightbox.addEventListener("click", function (e) {
+			if (e.target === lightbox) {
+				lightbox.classList.remove("active");
+				document.body.style.overflow = "auto";
+			}
+		});
+
+		// Keyboard navigation
+		document.addEventListener("keydown", function (e) {
+			if (!lightbox.classList.contains("active")) return;
+
+			if (e.key === "Escape") {
+				lightbox.classList.remove("active");
+				document.body.style.overflow = "auto";
+			} else if (e.key === "ArrowLeft") {
+				showPrevImage();
+			} else if (e.key === "ArrowRight") {
+				showNextImage();
+			}
+		});
+	}
+
+	// Animate gallery items on scroll
+	const observeGallery = new IntersectionObserver(
+		(entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					// Reset the animation
+					entry.target.style.animation = "none";
+					// Trigger reflow
+					void entry.target.offsetWidth;
+					// Restore animation
+					const index = Array.from(galleryItems).indexOf(entry.target);
+					entry.target.style.animation = `fadeInUp 0.8s forwards ${index * 0.1}s`;
+
+					observeGallery.unobserve(entry.target);
+				}
+			});
+		},
+		{
+			threshold: 0.2,
+		}
+	);
+
+	galleryItems.forEach((item) => {
+		observeGallery.observe(item);
+	});
 });
