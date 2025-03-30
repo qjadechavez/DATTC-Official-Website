@@ -5,20 +5,47 @@ document.addEventListener("DOMContentLoaded", function () {
 	const navbar = document.getElementById("navbar");
 
 	if (mobileMenuBtn && navbar) {
-		mobileMenuBtn.addEventListener("click", () => {
+		mobileMenuBtn.addEventListener("click", function () {
 			navbar.classList.toggle("active");
+
+			// Toggle icon between bars and times
+			const icon = this.querySelector("i");
+			if (icon.classList.contains("fa-bars")) {
+				icon.classList.remove("fa-bars");
+				icon.classList.add("fa-times");
+			} else {
+				icon.classList.remove("fa-times");
+				icon.classList.add("fa-bars");
+			}
+		});
+
+		// Close menu when clicking outside
+		document.addEventListener("click", function (e) {
+			// If menu is open AND click is outside the navbar AND not on menu button
+			if (navbar.classList.contains("active") && !navbar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+				navbar.classList.remove("active");
+
+				// Reset icon
+				const icon = mobileMenuBtn.querySelector("i");
+				if (icon) {
+					icon.classList.remove("fa-times");
+					icon.classList.add("fa-bars");
+				}
+			}
 		});
 	}
 
 	// Header scroll effect
 	const header = document.querySelector("header");
-	window.addEventListener("scroll", () => {
-		if (window.scrollY > 50) {
-			header.classList.add("scrolled");
-		} else {
-			header.classList.remove("scrolled");
-		}
-	});
+	if (header) {
+		window.addEventListener("scroll", () => {
+			if (window.scrollY > 20) {
+				header.classList.add("scrolled");
+			} else {
+				header.classList.remove("scrolled");
+			}
+		});
+	}
 
 	// Program tabs functionality
 	const programTabs = document.querySelectorAll(".program-tab");
