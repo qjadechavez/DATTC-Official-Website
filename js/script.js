@@ -260,4 +260,25 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		});
 	});
+
+	// Update active nav item based on scroll position
+	window.addEventListener("scroll", function () {
+		const sections = document.querySelectorAll("section[id]");
+		const scrollPosition = window.scrollY + 100; // Offset for header height
+
+		sections.forEach((section) => {
+			const sectionTop = section.offsetTop;
+			const sectionHeight = section.offsetHeight;
+			const sectionId = section.getAttribute("id");
+
+			if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+				document.querySelectorAll("#navbar li a").forEach((item) => {
+					item.classList.remove("active");
+					if (item.getAttribute("href") === "#" + sectionId) {
+						item.classList.add("active");
+					}
+				});
+			}
+		});
+	});
 });
