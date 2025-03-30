@@ -48,104 +48,6 @@ section {
 	padding: 40px 0;
 }
 
-/* Section dividers */
-.section-divider {
-	height: 2px;
-	width: 100%;
-	background: linear-gradient(to right, var(--primary), var(--secondary), var(--primary));
-	margin: 0;
-}
-
-/* Modern Section Dividers */
-.section-divider-modern {
-	position: relative;
-	height: 60px;
-	margin: 0;
-	padding: 0;
-	background-color: transparent;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden;
-}
-
-.section-divider-modern::before,
-.section-divider-modern::after {
-	content: "";
-	position: absolute;
-	width: calc(50% - 40px);
-	height: 2px;
-	background: linear-gradient(to right, rgba(52, 152, 219, 0.1), var(--secondary));
-	top: 50%;
-}
-
-.section-divider-modern::before {
-	left: 0;
-}
-
-.section-divider-modern::after {
-	right: 0;
-	background: linear-gradient(to left, rgba(52, 152, 219, 0.1), var(--secondary));
-}
-
-.divider-content {
-	position: relative;
-	z-index: 1;
-	width: 50px;
-	height: 50px;
-	border-radius: 50%;
-	background-color: white;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-	border: 2px solid rgba(52, 152, 219, 0.2);
-}
-
-.divider-content span {
-	color: var(--secondary);
-	font-size: 1.3rem;
-}
-
-/* Alternative divider style */
-.divider-alt::before,
-.divider-alt::after {
-	background: linear-gradient(to right, rgba(231, 76, 60, 0.1), var(--accent));
-}
-
-.divider-alt::after {
-	background: linear-gradient(to left, rgba(231, 76, 60, 0.1), var(--accent));
-}
-
-.divider-alt .divider-content {
-	border: 2px solid rgba(231, 76, 60, 0.2);
-}
-
-.divider-alt .divider-content span {
-	color: var(--accent);
-}
-
-/* Responsive adjustments for dividers */
-@media (max-width: 768px) {
-	.section-divider-modern {
-		height: 50px;
-	}
-
-	.section-divider-modern::before,
-	.section-divider-modern::after {
-		width: calc(50% - 30px);
-	}
-
-	.divider-content {
-		width: 40px;
-		height: 40px;
-	}
-
-	.divider-content span {
-		font-size: 1.1rem;
-	}
-}
-
 /* ===== 3. LAYOUT COMPONENTS ===== */
 .container {
 	width: 90%;
@@ -1994,10 +1896,38 @@ header.scrolled {
 .contact {
 	padding: 70px 0;
 	background-color: #f9f9f9;
+	position: relative;
+	overflow: hidden;
+}
+
+/* Background decoration for Contact section */
+.contact::before,
+.contact::after {
+	content: "";
+	position: absolute;
+	background-color: rgba(52, 152, 219, 0.1);
+	border-radius: 50%;
+	z-index: 0;
+}
+
+.contact::before {
+	width: 400px;
+	height: 400px;
+	top: -200px;
+	right: -150px;
+}
+
+.contact::after {
+	width: 350px;
+	height: 350px;
+	bottom: -150px;
+	left: -100px;
 }
 
 .contact .section-title {
 	margin-bottom: 40px;
+	position: relative;
+	z-index: 1;
 }
 
 /* Contact Container Layout */
@@ -2006,6 +1936,8 @@ header.scrolled {
 	flex-wrap: wrap;
 	gap: 30px;
 	margin-bottom: 50px;
+	position: relative;
+	z-index: 1;
 }
 
 .contact-info,
