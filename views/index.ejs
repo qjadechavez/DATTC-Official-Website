@@ -5,7 +5,7 @@
 		<meta charset="UTF-8" />
 		<meta
 			name="viewport"
-			content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
+			content="width=device-width, initial-scale=5.0"
 		/>
 		<link
 			rel="stylesheet"
@@ -18,49 +18,7 @@
 		<title>Digital Arts Technology Training Center Inc.</title>
 	</head>
 	<body>
-		<!-- Header -->
-		<header>
-			<div class="container header-container">
-				<a
-					href="index.html"
-					class="logo-button"
-				>
-					<div class="logo">
-						<img
-							src="assets/images/logos/DATTC_Logo.png"
-							alt="DATTC Logo"
-						/>
-						<div class="logo-text">
-							<h4>Digital Arts Technology</h4>
-							<h4>Training Center Inc.</h4>
-						</div>
-					</div>
-				</a>
-
-				<nav>
-					<ul id="navbar">
-						<li>
-							<a
-								href="#home"
-								class="active"
-							>
-								Home
-							</a>
-						</li>
-						<li><a href="#about">About</a></li>
-						<li><a href="#academics">Programs</a></li>
-						<li><a href="#trainers">Trainers</a></li>
-						<li><a href="#facilities">Facilities</a></li>
-						<li><a href="#partners">Partners</a></li>
-						<li><a href="#admissions">Admissions</a></li>
-						<li><a href="#contact">Contact</a></li>
-					</ul>
-					<button class="mobile-menu-btn">
-						<i class="fas fa-bars"></i>
-					</button>
-				</nav>
-			</div>
-		</header>
+		<%- include('partials/header') %>
 
 		<!-- Hero Section -->
 		<section
@@ -74,7 +32,7 @@
 				loop
 			>
 				<source
-					src="assets/hero_background.mp4"
+					src="/assets/hero_background.mp4"
 					type="video/mp4"
 				/>
 			</video>
@@ -128,7 +86,7 @@
 				<div class="about-content">
 					<div class="about-image">
 						<img
-							src="assets/images/DATTC_School.jpg"
+							src="/assets/images/DATTC_School.jpg"
 							alt="School Building"
 						/>
 					</div>
@@ -591,98 +549,7 @@
 					</div>
 
 					<!-- Contact Form -->
-					<div class="contact-form-container">
-						<h3>Request Information</h3>
-						<p>Fill out the form below and our admissions team will contact you shortly.</p>
-
-						<form
-							class="contact-form"
-							id="contactForm"
-						>
-							<div class="form-row">
-								<div class="form-group">
-									<label for="name">
-										Full Name
-										<span class="required">*</span>
-									</label>
-									<input
-										type="text"
-										id="name"
-										name="name"
-										required
-									/>
-								</div>
-
-								<div class="form-group">
-									<label for="email">
-										Email Address
-										<span class="required">*</span>
-									</label>
-									<input
-										type="email"
-										id="email"
-										name="email"
-										required
-									/>
-								</div>
-							</div>
-
-							<div class="form-row">
-								<div class="form-group">
-									<label for="phone">
-										Phone Number
-										<span class="required">*</span>
-									</label>
-									<input
-										type="tel"
-										id="phone"
-										name="phone"
-										required
-									/>
-								</div>
-
-								<div class="form-group">
-									<label for="program">Program of Interest</label>
-									<select
-										id="program"
-										name="program"
-									>
-										<option value="">Select a Program</option>
-										<option value="2D Animation">2D Animation NCIII</option>
-										<option value="Contact Center">Contact Center Services NCII</option>
-										<option value="Java Programming">Programming (Java) NCIII</option>
-										<option value="Stenography">Stenography</option>
-										<option value="Adobe Photoshop">Adobe Photoshop</option>
-										<option value="Video Graphics">Video Graphics</option>
-										<option value="Other">Other</option>
-									</select>
-								</div>
-							</div>
-
-							<div class="form-group">
-								<label for="message">
-									Message
-									<span class="required">*</span>
-								</label>
-								<textarea
-									id="message"
-									name="message"
-									rows="5"
-									required
-								></textarea>
-							</div>
-
-							<div class="form-group">
-								<button
-									type="submit"
-									class="btn submit-btn"
-								>
-									<i class="fas fa-paper-plane"></i>
-									Send Message
-								</button>
-							</div>
-						</form>
-					</div>
+					<%- include('partials/contact-form') %>
 				</div>
 
 				<!-- Map Section -->
@@ -703,16 +570,39 @@
 			</div>
 		</section>
 
-		<footer class="footer">
-			<div class="container">
-				<div class="footer-content">
-					<div class="footer-text">
-						<p>&copy; 2025 Digital Arts Technology Training Center Inc. All rights reserved @JAMDC.</p>
-					</div>
+		<!-- Success Modal -->
+		<div
+			id="successModal"
+			class="modal"
+		>
+			<div class="modal-content success">
+				<span class="close-modal">&times;</span>
+				<div class="modal-icon">
+					<i class="fas fa-check-circle"></i>
 				</div>
+				<h3>Thank You!</h3>
+				<p>Your message has been sent successfully. We will get back to you shortly.</p>
+				<button class="btn modal-btn">Close</button>
 			</div>
-			<h2>test</h2>
-		</footer>
+		</div>
+
+		<!-- Error Modal -->
+		<div
+			id="errorModal"
+			class="modal"
+		>
+			<div class="modal-content error">
+				<span class="close-modal">&times;</span>
+				<div class="modal-icon">
+					<i class="fas fa-exclamation-circle"></i>
+				</div>
+				<h3>Oops!</h3>
+				<p>There was an error sending your message. Please try again later or contact us directly.</p>
+				<button class="btn modal-btn">Close</button>
+			</div>
+		</div>
+
+		<%- include('partials/footer') %>
 
 		<script src="js/parallax.js"></script>
 		<script src="js/script.js"></script>

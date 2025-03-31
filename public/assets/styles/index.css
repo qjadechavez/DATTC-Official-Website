@@ -1152,7 +1152,7 @@ header.scrolled {
 	animation-delay: 0.3s;
 }
 .gallery-item:nth-child(4) {
-	animation-delay: 0.4s;
+	animation-delay: 4s;
 }
 .gallery-item:nth-child(5) {
 	animation-delay: 0.5s;
@@ -2144,4 +2144,137 @@ header.scrolled {
 .contact-form-container {
 	flex: 1;
 	min-width: 300px;
+}
+
+/* Add to your existing CSS */
+.form-message {
+	margin-top: 20px;
+	padding: 15px;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	animation: fadeIn 0.5s;
+}
+
+.form-message i {
+	font-size: 24px;
+	margin-right: 15px;
+}
+
+.form-message.success {
+	background-color: rgba(76, 175, 80, 0.1);
+	border: 1px solid #4caf50;
+	color: #2e7d32;
+}
+
+.form-message.error {
+	background-color: rgba(244, 67, 54, 0.1);
+	border: 1px solid #f44336;
+	color: #d32f2f;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Modal Styles */
+.modal {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.7);
+	z-index: 1000;
+	overflow: auto;
+	animation: fadeIn 0.3s;
+}
+
+.modal-content {
+	position: relative;
+	background-color: #fff;
+	margin: 10vh auto;
+	padding: 30px;
+	border-radius: 10px;
+	width: 90%;
+	max-width: 500px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	animation: slideIn 0.4s;
+}
+
+.close-modal {
+	position: absolute;
+	top: 15px;
+	right: 20px;
+	font-size: 28px;
+	font-weight: bold;
+	color: #aaa;
+	cursor: pointer;
+	transition: color 0.2s;
+}
+
+.close-modal:hover {
+	color: #333;
+}
+
+.modal-icon {
+	margin: 20px 0;
+}
+
+.modal-icon i {
+	font-size: 60px;
+}
+
+.modal-content.success .modal-icon i {
+	color: #4caf50;
+}
+
+.modal-content.error .modal-icon i {
+	color: #f44336;
+}
+
+.modal-content h3 {
+	margin-bottom: 15px;
+	font-size: 24px;
+}
+
+.modal-content p {
+	margin-bottom: 25px;
+	color: #555;
+	line-height: 1.6;
+}
+
+.modal-btn {
+	padding: 10px 25px;
+	margin-top: 10px;
+	transition: all 0.3s;
+}
+
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes slideIn {
+	from {
+		transform: translateY(-50px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
