@@ -1,0 +1,21 @@
+{
+	"name": "dattc",
+	"version": "1.0.0",
+	"description": "Digital Arts Technology Training Center Inc. Website",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js",
+		"dev": "nodemon server.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"dotenv": "^16.3.1",
+		"ejs": "^3.1.9",
+		"express": "^4.18.2",
+		"nodemailer": "^6.9.7"
+	},
+	"devDependencies": {
+		"nodemon": "^3.0.1"
+	}
+}

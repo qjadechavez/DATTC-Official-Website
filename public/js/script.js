@@ -281,4 +281,90 @@ document.addEventListener("DOMContentLoaded", function () {
 			}
 		});
 	});
+
+	// Form handling
+	const urlParams = new URLSearchParams(window.location.search);
+	const formSubmitted = urlParams.get("formSubmitted");
+	const formError = urlParams.get("formError");
+
+	if (formSubmitted === "true") {
+		const contactForm = document.getElementById("contactForm");
+		if (contactForm) {
+			contactForm.reset();
+
+			// Scroll to the success message
+			const formMessage = document.querySelector(".form-message");
+			if (formMessage) {
+				formMessage.scrollIntoView({behavior: "smooth", block: "center"});
+			}
+
+			// Remove the parameter from the URL without refreshing the page
+			window.history.replaceState({}, document.title, window.location.pathname);
+		}
+	}
+
+	// Modal handling
+	const successModal = document.getElementById("successModal");
+	const errorModal = document.getElementById("errorModal");
+
+	// Get all close elements
+	const closeButtons = document.querySelectorAll(".close-modal, .modal-btn");
+
+	// Show appropriate modal based on URL parameters
+	if (formSubmitted === "true") {
+		showModal(successModal);
+
+		// Reset the form
+		const contactForm = document.getElementById("contactForm");
+		if (contactForm) {
+			contactForm.reset();
+		}
+
+		// Remove the parameter from URL
+		removeUrlParameters();
+	} else if (formError === "true") {
+		showModal(errorModal);
+
+		// Remove the parameter from URL
+		removeUrlParameters();
+	}
+
+	// Add click event to all close buttons
+	closeButtons.forEach((button) => {
+		button.addEventListener("click", function () {
+			hideModals();
+		});
+	});
+
+	// Close modal when clicking outside
+	window.addEventListener("click", function (event) {
+		if (event.target === successModal || event.target === errorModal) {
+			hideModals();
+		}
+	});
+
+	// Close modal with Escape key
+	document.addEventListener("keydown", function (event) {
+		if (event.key === "Escape") {
+			hideModals();
+		}
+	});
+
+	// Function to show a modal
+	function showModal(modal) {
+		modal.style.display = "block";
+		document.body.style.overflow = "hidden"; // Prevent scrolling when modal is open
+	}
+
+	// Function to hide all modals
+	function hideModals() {
+		successModal.style.display = "none";
+		errorModal.style.display = "none";
+		document.body.style.overflow = ""; // Restore scrolling
+	}
+
+	// Function to remove URL parameters
+	function removeUrlParameters() {
+		window.history.replaceState({}, document.title, window.location.pathname);
+	}
 });

@@ -1,0 +1,93 @@
+<!-- @format -->
+
+<!-- filepath: c:\Users\decha\Documents\GitHub\DATTC\views\partials\contact-form.ejs -->
+<div class="contact-form-container">
+	<h3>Request Information</h3>
+	<p>Fill out the form below and our admissions team will contact you shortly.</p>
+
+	<form
+		class="contact-form"
+		id="contactForm"
+		action="/submit-contact"
+		method="POST"
+	>
+		<div class="form-row">
+			<div class="form-group">
+				<label for="name">
+					Full Name
+					<span class="required">*</span>
+				</label>
+				<input
+					type="text"
+					id="name"
+					name="name"
+					required
+				/>
+			</div>
+
+			<div class="form-group">
+				<label for="email">
+					Email Address
+					<span class="required">*</span>
+				</label>
+				<input
+					type="email"
+					id="email"
+					name="email"
+					required
+				/>
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="form-group">
+				<label for="phone">
+					Phone Number
+					<span class="required">*</span>
+				</label>
+				<input
+					type="tel"
+					id="phone"
+					name="phone"
+					required
+				/>
+			</div>
+
+			<div class="form-group">
+				<label for="program">Program of Interest</label>
+				<select
+					id="program"
+					name="program"
+				>
+					<option value="">Select a Program</option>
+					<% const programs = [ "2D Animation NCIII", "Contact Center Services NCII", "Programming (Java) NCIII", "Stenography", "Adobe Photoshop", "Video Graphics", "Other" ] %> <% programs.forEach(program => { %>
+					<option value="<%= program %>"><%= program %></option>
+					<% }) %>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="message">
+				Message
+				<span class="required">*</span>
+			</label>
+			<textarea
+				id="message"
+				name="message"
+				rows="5"
+				required
+			></textarea>
+		</div>
+
+		<div class="form-group">
+			<button
+				type="submit"
+				class="btn submit-btn"
+			>
+				<i class="fas fa-paper-plane"></i>
+				Send Message
+			</button>
+		</div>
+	</form>
+</div>
