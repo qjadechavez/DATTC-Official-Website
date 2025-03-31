@@ -204,8 +204,11 @@ nav {
 	font-size: 1.5rem;
 	color: var(--primary);
 	cursor: pointer;
-	padding: 0;
+	padding: 10px; /* Increased padding */
 	margin-left: 15px;
+	min-width: 44px; /* Minimum touch target size */
+	min-height: 44px; /* Minimum touch target size */
+	z-index: 1001; /* Ensure it's above other elements */
 }
 
 /* Scrolled Header Effect */
@@ -688,6 +691,11 @@ header.scrolled {
 	#navbar li a.active {
 		background-color: rgba(52, 152, 219, 0.1);
 		color: var(--secondary);
+	}
+
+	/* Ensure button remains visible */
+	.mobile-menu-btn i {
+		font-size: 24px; /* Slightly larger icon for better visibility */
 	}
 
 	/* Section components */
@@ -2098,16 +2106,63 @@ header.scrolled {
 
 /* Footer */
 .footer {
-	padding: 30px 0;
+	padding: 20px 0;
 	background-color: #222;
 	color: #fff;
 	text-align: center;
 }
 
-.footer-text p {
-	margin: 0;
-	font-size: 14px;
+.footer-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.footer-text {
 	color: #aaa;
+	font-size: 14px;
+}
+
+/* Responsive footer adjustments */
+@media (max-width: 576px) {
+	.footer {
+		padding: 15px 0;
+	}
+
+	.footer-text {
+		font-size: 12px;
+	}
+}
+
+/* Form Validation Styles - Keep these for the contact form */
+.error-message {
+	color: #ff3860;
+	font-size: 14px;
+	margin-top: 5px;
+	display: none;
+	animation: fadeIn 0.3s;
+	font-weight: 500;
+}
+
+.form-group input.invalid,
+.form-group textarea.invalid,
+.form-group select.invalid {
+	border-color: #ff3860;
+	background-color: rgba(255, 56, 96, 0.05);
+}
+
+.form-group input:focus.invalid,
+.form-group textarea:focus.invalid,
+.form-group select:focus.invalid {
+	box-shadow: 0 0 0 2px rgba(255, 56, 96, 0.25);
+}
+
+/* Valid input styling */
+.form-group input.valid,
+.form-group textarea.valid,
+.form-group select.valid {
+	border-color: #23d160;
+	background-color: rgba(35, 209, 96, 0.05);
 }
 
 /* Responsive Adjustments */
@@ -2182,6 +2237,37 @@ header.scrolled {
 		opacity: 1;
 		transform: translateY(0);
 	}
+}
+
+/* Form Validation Styles */
+.error-message {
+	color: #ff3860;
+	font-size: 14px;
+	margin-top: 5px;
+	display: none;
+	animation: fadeIn 0.3s;
+	font-weight: 500;
+}
+
+.form-group input.invalid,
+.form-group textarea.invalid,
+.form-group select.invalid {
+	border-color: #ff3860;
+	background-color: rgba(255, 56, 96, 0.05);
+}
+
+.form-group input:focus.invalid,
+.form-group textarea:focus.invalid,
+form-group select:focus.invalid {
+	box-shadow: 0 0 0 2px rgba(255, 56, 96, 0.25);
+}
+
+/* Valid input styling */
+.form-group input.valid,
+.form-group textarea.valid,
+form-group select.valid {
+	border-color: #23d160;
+	background-color: rgba(35, 209, 96, 0.05);
 }
 
 /* Modal Styles */

@@ -1,37 +1,57 @@
 /** @format */
 document.addEventListener("DOMContentLoaded", function () {
-	// Mobile menu functionality
+	// Mobile menu functionality - UPDATED for better mobile support
 	const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 	const navbar = document.getElementById("navbar");
 
 	if (mobileMenuBtn && navbar) {
-		mobileMenuBtn.addEventListener("click", function () {
-			navbar.classList.toggle("active");
+		// Use touchstart for mobile and click for desktop
+		["click", "touchstart"].forEach((eventType) => {
+			mobileMenuBtn.addEventListener(
+				eventType,
+				function (e) {
+					// Prevent default only for touchstart to avoid double-firing
+					if (eventType === "touchstart") {
+						e.preventDefault();
+					}
 
-			// Toggle icon between bars and times
-			const icon = this.querySelector("i");
-			if (icon.classList.contains("fa-bars")) {
-				icon.classList.remove("fa-bars");
-				icon.classList.add("fa-times");
-			} else {
-				icon.classList.remove("fa-times");
-				icon.classList.add("fa-bars");
-			}
+					navbar.classList.toggle("active");
+
+					// Toggle icon between bars and times
+					const icon = this.querySelector("i");
+					if (icon) {
+						if (icon.classList.contains("fa-bars")) {
+							icon.classList.remove("fa-bars");
+							icon.classList.add("fa-times");
+						} else {
+							icon.classList.remove("fa-times");
+							icon.classList.add("fa-bars");
+						}
+					}
+				},
+				{passive: false}
+			);
 		});
 
-		// Close menu when clicking outside
-		document.addEventListener("click", function (e) {
-			// If menu is open AND click is outside the navbar AND not on menu button
-			if (navbar.classList.contains("active") && !navbar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-				navbar.classList.remove("active");
+		// Close menu when clicking/touching outside
+		["click", "touchstart"].forEach((eventType) => {
+			document.addEventListener(
+				eventType,
+				function (e) {
+					// If menu is open AND click is outside the navbar AND not on menu button
+					if (navbar.classList.contains("active") && !navbar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+						navbar.classList.remove("active");
 
-				// Reset icon
-				const icon = mobileMenuBtn.querySelector("i");
-				if (icon) {
-					icon.classList.remove("fa-times");
-					icon.classList.add("fa-bars");
-				}
-			}
+						// Reset icon
+						const icon = mobileMenuBtn.querySelector("i");
+						if (icon) {
+							icon.classList.remove("fa-times");
+							icon.classList.add("fa-bars");
+						}
+					}
+				},
+				{passive: true}
+			);
 		});
 	}
 
@@ -94,6 +114,15 @@ document.addEventListener("DOMContentLoaded", function () {
 					// Close mobile menu if open
 					if (navbar.classList.contains("active")) {
 						navbar.classList.remove("active");
+
+						// Add this block to ensure the icon changes back
+						if (mobileMenuBtn) {
+							const icon = mobileMenuBtn.querySelector("i");
+							if (icon) {
+								icon.classList.remove("fa-times");
+								icon.classList.add("fa-bars");
+							}
+						}
 					}
 
 					// Scroll to element with offset for header
@@ -241,8 +270,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (targetId === "#") return;
 			const targetElement = document.querySelector(targetId);
 			if (targetElement) {
+				// Important fix: Always reset the menu icon when a link is clicked
 				if (navbar && navbar.classList.contains("active")) {
 					navbar.classList.remove("active");
+
+					// Fix icon state - this was the missing part
 					if (mobileMenuBtn) {
 						const icon = mobileMenuBtn.querySelector("i");
 						if (icon) {
@@ -251,6 +283,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						}
 					}
 				}
+
 				const headerHeight = document.querySelector("header").offsetHeight;
 				const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
 				window.scrollTo({
@@ -366,5 +399,118 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Function to remove URL parameters
 	function removeUrlParameters() {
 		window.history.replaceState({}, document.title, window.location.pathname);
+	}
+
+	// Form validation
+	const contactForm = document.getElementById("contactForm");
+	if (contactForm) {
+		// Create validation error container for each input
+		const formInputs = contactForm.querySelectorAll("input, textarea, select");
+		formInputs.forEach((input) => {
+			const errorSpan = document.createElement("span");
+			errorSpan.className = "error-message";
+			errorSpan.style.color = "#ff3860";
+			errorSpan.style.fontSize = "14px";
+			errorSpan.style.marginTop = "5px";
+			errorSpan.style.display = "none";
+			input.parentNode.insertBefore(errorSpan, input.nextSibling);
+		});
+
+		contactForm.addEventListener("submit", function (e) {
+			let isValid = true;
+			let firstError = null;
+
+			// Clear all error messages first
+			const errorMessages = contactForm.querySelectorAll(".error-message");
+			errorMessages.forEach((span) => {
+				span.style.display = "none";
+				span.textContent = "";
+			});
+
+			// Validate name (required, at least 2 characters)
+			const nameInput = contactForm.querySelector("input[name='name']");
+			if (nameInput) {
+				const errorSpan = nameInput.nextElementSibling;
+				if (!nameInput.value.trim()) {
+					errorSpan.textContent = "Name is required";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || nameInput;
+				} else if (nameInput.value.trim().length < 2) {
+					errorSpan.textContent = "Name must be at least 2 characters";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || nameInput;
+				}
+			}
+
+			// Validate email (required, valid format)
+			const emailInput = contactForm.querySelector("input[name='email']");
+			if (emailInput) {
+				const errorSpan = emailInput.nextElementSibling;
+				if (!emailInput.value.trim()) {
+					errorSpan.textContent = "Email is required";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || emailInput;
+				} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+					errorSpan.textContent = "Please enter a valid email address";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || emailInput;
+				}
+			}
+
+			// Validate phone (optional, but must be valid if provided)
+			const phoneInput = contactForm.querySelector("input[name='phone']");
+			if (phoneInput && phoneInput.value.trim()) {
+				const errorSpan = phoneInput.nextElementSibling;
+				// Simple validation - at least 10 digits
+				if (!/^[0-9]{10,15}$/.test(phoneInput.value.replace(/[^0-9]/g, ""))) {
+					errorSpan.textContent = "Please enter a valid phone number";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || phoneInput;
+				}
+			}
+
+			// Validate message (required, minimum length)
+			const messageInput = contactForm.querySelector("textarea[name='message']");
+			if (messageInput) {
+				const errorSpan = messageInput.nextElementSibling;
+				if (!messageInput.value.trim()) {
+					errorSpan.textContent = "Message is required";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || messageInput;
+				} else if (messageInput.value.trim().length < 10) {
+					errorSpan.textContent = "Message must be at least 10 characters";
+					errorSpan.style.display = "block";
+					isValid = false;
+					firstError = firstError || messageInput;
+				}
+			}
+
+			// Prevent form submission if validation fails
+			if (!isValid) {
+				e.preventDefault();
+				// Scroll to first error
+				if (firstError) {
+					firstError.focus();
+					firstError.scrollIntoView({behavior: "smooth", block: "center"});
+				}
+			}
+		});
+
+		// Real-time validation as user types
+		formInputs.forEach((input) => {
+			input.addEventListener("input", function () {
+				const errorSpan = this.nextElementSibling;
+				if (errorSpan && errorSpan.classList.contains("error-message")) {
+					errorSpan.style.display = "none";
+					errorSpan.textContent = "";
+				}
+			});
+		});
 	}
 });
