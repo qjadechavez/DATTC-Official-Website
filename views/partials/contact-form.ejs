@@ -79,7 +79,6 @@
 				required
 			></textarea>
 		</div>
-
 		<div class="form-group">
 			<button
 				type="submit"
@@ -89,5 +88,24 @@
 				Send Message
 			</button>
 		</div>
+		<input
+			type="hidden"
+			id="g-recaptcha-response"
+			name="g-recaptcha-response"
+		/>
 	</form>
 </div>
+
+<script src="https://www.google.com/recaptcha/api.js?render=6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4"></script>
+<script>
+	document.getElementById("contactForm").addEventListener("submit", function (event) {
+		event.preventDefault();
+
+		grecaptcha.ready(function () {
+			grecaptcha.execute("6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4", {action: "submit"}).then(function (token) {
+				document.getElementById("g-recaptcha-response").value = token;
+				document.getElementById("contactForm").submit();
+			});
+		});
+	});
+</script>

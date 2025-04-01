@@ -3,6 +3,9 @@
 const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
+const {RecaptchaV3} = require("express-recaptcha");
+
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -27,6 +30,8 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
+const recaptcha = new RecaptchaV3(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
+
 // Routes
 app.get("/", (req, res) => {
 	const formSubmitted = req.query.formSubmitted === "true";
@@ -41,6 +46,29 @@ app.get("/", (req, res) => {
 // Contact form submission handler
 app.post("/submit-contact", async (req, res) => {
 	try {
+		const recaptchaResponse = req.body["g-recaptcha-response"];
+
+		// Verify reCAPTCHA
+		const verificationURL = "https://www.google.com/recaptcha/api/siteverify";
+		const response = await fetch(verificationURL, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+			},
+			body: new URLSearchParams({
+				secret: process.env.RECAPTCHA_SECRET_KEY,
+				response: recaptchaResponse,
+			}),
+		});
+
+		const recaptchaData = await response.json();
+		console.log("reCAPTCHA verification response:", recaptchaData); // For debugging
+
+		// Check if reCAPTCHA validation passed
+		if (!recaptchaData.success || recaptchaData.score < 0.5) {
+			return res.status(400).send("Failed reCAPTCHA verification");
+		}
+
 		const {name, email, phone, program, message} = req.body;
 
 		// Email content

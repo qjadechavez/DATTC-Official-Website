@@ -13,7 +13,9 @@
 		"dotenv": "^16.3.1",
 		"ejs": "^3.1.9",
 		"express": "^4.18.2",
-		"nodemailer": "^6.9.7"
+		"express-recaptcha": "^5.1.0",
+		"nodemailer": "^6.9.7",
+		"node-fetch": "^3.3.2"
 	},
 	"devDependencies": {
 		"nodemon": "^3.0.1"
