@@ -1,0 +1,34 @@
+/**
+ * Footer Stylesheet
+ *
+ * @format
+ */
+
+.footer {
+	padding: 20px 0;
+	background-color: #222;
+	color: #fff;
+	text-align: center;
+}
+
+.footer-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.footer-text {
+	color: #aaa;
+	font-size: 14px;
+}
+
+/* Footer-specific media queries */
+@media (max-width: 576px) {
+	.footer {
+		padding: 15px 0;
+	}
+
+	.footer-text {
+		font-size: 12px;
+	}
+}

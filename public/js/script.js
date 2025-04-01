@@ -1,57 +1,51 @@
 /** @format */
 document.addEventListener("DOMContentLoaded", function () {
-	// Mobile menu functionality - UPDATED for better mobile support
+	// Simplified mobile menu functionality
 	const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 	const navbar = document.getElementById("navbar");
+	const menuIcon = mobileMenuBtn?.querySelector("i");
+
+	// Add index to navbar items for staggered animation
+	if (navbar) {
+		const navItems = navbar.querySelectorAll("li");
+		navItems.forEach((item, index) => {
+			item.style.setProperty("--i", index);
+		});
+	}
 
 	if (mobileMenuBtn && navbar) {
-		// Use touchstart for mobile and click for desktop
-		["click", "touchstart"].forEach((eventType) => {
-			mobileMenuBtn.addEventListener(
-				eventType,
-				function (e) {
-					// Prevent default only for touchstart to avoid double-firing
-					if (eventType === "touchstart") {
-						e.preventDefault();
-					}
+		// Simple toggle function
+		function toggleMenu() {
+			navbar.classList.toggle("active");
 
-					navbar.classList.toggle("active");
+			// Toggle icon
+			if (menuIcon) {
+				if (navbar.classList.contains("active")) {
+					menuIcon.className = "fas fa-times";
+				} else {
+					menuIcon.className = "fas fa-bars";
+				}
+			}
+		}
 
-					// Toggle icon between bars and times
-					const icon = this.querySelector("i");
-					if (icon) {
-						if (icon.classList.contains("fa-bars")) {
-							icon.classList.remove("fa-bars");
-							icon.classList.add("fa-times");
-						} else {
-							icon.classList.remove("fa-times");
-							icon.classList.add("fa-bars");
-						}
-					}
-				},
-				{passive: false}
-			);
+		// Event listeners for menu button
+		mobileMenuBtn.addEventListener("click", toggleMenu);
+
+		// Close menu when clicking a link
+		const navLinks = navbar.querySelectorAll("a");
+		navLinks.forEach((link) => {
+			link.addEventListener("click", function () {
+				if (navbar.classList.contains("active")) {
+					toggleMenu();
+				}
+			});
 		});
 
-		// Close menu when clicking/touching outside
-		["click", "touchstart"].forEach((eventType) => {
-			document.addEventListener(
-				eventType,
-				function (e) {
-					// If menu is open AND click is outside the navbar AND not on menu button
-					if (navbar.classList.contains("active") && !navbar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-						navbar.classList.remove("active");
-
-						// Reset icon
-						const icon = mobileMenuBtn.querySelector("i");
-						if (icon) {
-							icon.classList.remove("fa-times");
-							icon.classList.add("fa-bars");
-						}
-					}
-				},
-				{passive: true}
-			);
+		// Close when clicking outside
+		document.addEventListener("click", function (e) {
+			if (navbar.classList.contains("active") && !navbar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+				toggleMenu();
+			}
 		});
 	}
 
@@ -134,6 +128,39 @@ document.addEventListener("DOMContentLoaded", function () {
 						behavior: "smooth",
 					});
 				}
+			}
+		});
+	});
+
+	// Improved smooth scroll for all navbar links
+	document.querySelectorAll("#navbar a[href^='#']").forEach((link) => {
+		link.addEventListener("click", function (e) {
+			e.preventDefault();
+			const targetId = this.getAttribute("href");
+			if (targetId === "#") return;
+
+			const targetElement = document.querySelector(targetId);
+			if (targetElement) {
+				// Close mobile menu if open
+				if (navbar && navbar.classList.contains("active")) {
+					navbar.classList.remove("active");
+
+					// Reset the hamburger icon
+					const icon = mobileMenuBtn.querySelector("i");
+					if (icon) {
+						icon.classList.remove("fa-times");
+						icon.classList.add("fa-bars");
+					}
+				}
+
+				// Scroll to element with offset for header
+				const headerHeight = document.querySelector("header").offsetHeight;
+				const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
+
+				window.scrollTo({
+					top: targetPosition,
+					behavior: "smooth",
+				});
 			}
 		});
 	});
