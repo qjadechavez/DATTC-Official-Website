@@ -332,6 +332,50 @@ header.scrolled {
 	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
 }
 
+/* Video Loader Styles */
+.hero {
+	position: relative;
+}
+
+.video-loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: var(--primary);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 5;
+	transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.video-loader.hidden {
+	opacity: 0;
+	visibility: hidden;
+}
+
+.loader {
+	width: 48px;
+	height: 48px;
+	border: 5px solid #fff;
+	border-bottom-color: var(--secondary);
+	border-radius: 50%;
+	display: inline-block;
+	box-sizing: border-box;
+	animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
 /* ===== 6. ABOUT SECTION ===== */
 .about {
 	background-color: white;

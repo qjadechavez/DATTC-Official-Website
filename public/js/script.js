@@ -1,5 +1,33 @@
 /** @format */
 document.addEventListener("DOMContentLoaded", function () {
+	// Add this at the beginning of your DOMContentLoaded function
+
+	// Video loading handler
+	const heroVideo = document.querySelector(".hero-video");
+	const videoLoader = document.querySelector(".video-loader");
+
+	if (heroVideo && videoLoader) {
+		// Function to hide loader when video is ready
+		function hideLoader() {
+			videoLoader.classList.add("hidden");
+			// Remove loader from DOM after transition completes
+			setTimeout(() => {
+				videoLoader.remove();
+			}, 500);
+		}
+
+		// Hide loader when video can play through
+		heroVideo.addEventListener("canplaythrough", hideLoader);
+
+		// Fallback - hide loader after 5 seconds maximum wait time
+		setTimeout(hideLoader, 5000);
+
+		// If video is already loaded
+		if (heroVideo.readyState >= 3) {
+			hideLoader();
+		}
+	}
+
 	// Simplified mobile menu functionality
 	const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
 	const navbar = document.getElementById("navbar");
