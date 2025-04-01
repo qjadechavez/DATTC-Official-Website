@@ -105,13 +105,26 @@
 			></span>
 		</div>
 
-		<!-- reCAPTCHA container positioned in the form -->
 		<div class="form-group recaptcha-container">
-			<div
-				class="g-recaptcha"
-				id="recaptcha-container"
-			></div>
-			<small>This site is protected by reCAPTCHA</small>
+			<div class="recaptcha-notice">
+				<small>
+					This site is protected by reCAPTCHA and the
+					<a
+						href="https://policies.google.com/privacy"
+						target="_blank"
+					>
+						Google Privacy Policy
+					</a>
+					and
+					<a
+						href="https://policies.google.com/terms"
+						target="_blank"
+					>
+						Terms of Service
+					</a>
+					apply.
+				</small>
+			</div>
 			<span
 				class="error-message"
 				id="recaptcha-error"
@@ -259,12 +272,35 @@
 			return false;
 		}
 
-		// If form is valid, proceed with reCAPTCHA and submission
+		// Show loading state on button
+		const submitBtn = this.querySelector(".submit-btn");
+		const originalBtnText = submitBtn.innerHTML;
+		submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+		submitBtn.disabled = true;
+
+		// If form is valid, proceed with reCAPTCHA verification
 		grecaptcha.ready(function () {
-			grecaptcha.execute("6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4", {action: "submit"}).then(function (token) {
-				document.getElementById("g-recaptcha-response").value = token;
-				document.getElementById("contactForm").submit();
-			});
+			// Show loading indicator or disable submit button here if desired
+
+			grecaptcha
+				.execute("6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4", {action: "submit"})
+				.then(function (token) {
+					// Set the token value in the hidden field
+					document.getElementById("g-recaptcha-response").value = token;
+
+					// Submit the form
+					document.getElementById("contactForm").submit();
+				})
+				.catch(function (error) {
+					// Restore button state
+					submitBtn.innerHTML = originalBtnText;
+					submitBtn.disabled = false;
+
+					// Handle reCAPTCHA errors
+					document.getElementById("recaptcha-error").textContent = "reCAPTCHA verification failed. Please try again.";
+					document.getElementById("recaptcha-error").style.display = "block";
+					console.error("reCAPTCHA error:", error);
+				});
 		});
 	});
 </script>

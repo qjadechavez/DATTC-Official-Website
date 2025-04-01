@@ -2367,69 +2367,6 @@ header.scrolled {
 	}
 }
 
-/* Combined reCAPTCHA Styling with better positioning */
-.g-recaptcha {
-	position: relative;
-	z-index: 100;
-	margin: 0 auto 15px auto;
-	width: fit-content;
-	transform-origin: center;
-	transition: all 0.3s ease;
-}
-
-/* Force high z-index for all reCAPTCHA iframes */
-iframe[src*="recaptcha"],
-.g-recaptcha iframe,
-.grecaptcha-badge {
-	z-index: 9999 !important;
-}
-
-/* Fix for reCAPTCHA v3 badge */
-.grecaptcha-badge {
-	z-index: 9999 !important;
-	visibility: visible !important;
-	opacity: 0.9 !important;
-	position: fixed !important;
-	bottom: 20px !important;
-	right: 20px !important;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1) !important;
-	width: 70px !important; /* Make badge smaller */
-	height: 60px !important; /* Make badge smaller */
-	transform: scale(0.85) !important; /* Scale down badge */
-	transform-origin: bottom right !important;
-	transition: opacity 0.3s ease !important;
-}
-
-/* Show just the badge part */
-.grecaptcha-badge .grecaptcha-logo {
-	overflow: hidden !important;
-}
-
-/* Hide text portion of the badge */
-.grecaptcha-badge iframe {
-	margin-right: -100px !important; /* This pushes the text part off-screen */
-}
-
-/* Ensure the reCAPTCHA widget still works normally */
-.g-recaptcha {
-	position: relative;
-	z-index: 100;
-	margin: 0 auto 15px auto;
-	width: fit-content;
-	transform-origin: center;
-	transition: all 0.3s ease;
-}
-
-/* Fix for reCAPTCHA v3 badge */
-.grecaptcha-badge {
-	visibility: visible !important;
-	opacity: 1 !important;
-	position: fixed !important;
-	bottom: 20px !important;
-	right: 20px !important;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) !important;
-}
-
 /* Improved responsive reCAPTCHA behavior */
 @media screen and (max-width: 600px) {
 	.g-recaptcha {
@@ -2469,31 +2406,73 @@ iframe[src*="recaptcha"],
 	isolation: isolate;
 	position: relative;
 }
+/* Add to your CSS file */
+.recaptcha-notice {
+	text-align: center;
+	margin-bottom: 10px;
+}
 
-/* reCAPTCHA Container Styling */
+.recaptcha-notice small {
+	color: #666;
+	font-size: 11px;
+}
+
+.recaptcha-notice a {
+	color: #1a73e8;
+	text-decoration: none;
+}
+
+.recaptcha-notice a:hover {
+	text-decoration: underline;
+}
+
+/* reCAPTCHA Styles */
 .recaptcha-container {
-	margin: 15px 0;
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-bottom: 20px;
 }
 
-.recaptcha-container small {
-	margin-top: 5px;
+.recaptcha-notice {
+	text-align: center;
+	margin: 10px 0;
+	width: 100%;
+}
+
+.recaptcha-notice small {
 	color: #666;
-	font-size: 12px;
+	font-size: 11px;
+	line-height: 1.4;
 }
 
-/* reCAPTCHA Badge Styling - Non-sticky version */
-.g-recaptcha {
-	position: relative;
-	z-index: 100;
-	margin: 0 auto 5px auto;
-	width: fit-content;
+.recaptcha-notice a {
+	color: #1a73e8;
+	text-decoration: none;
 }
 
+.recaptcha-notice a:hover {
+	text-decoration: underline;
+}
+
+/* Hide the default reCAPTCHA badge since we're showing the privacy notice in the form */
 .grecaptcha-badge {
-	margin: 0 auto !important;
-	position: static !important;
-	box-shadow: 0 0 4px rgba(0, 0, 0, 0.1) !important;
+	visibility: hidden !important;
+}
+
+/* Style the submit button to be more prominent */
+.submit-btn {
+	background-color: var(--secondary);
+	padding: 12px 25px;
+	width: 100%;
+	justify-content: center;
+	font-size: 16px;
+	transition: all 0.3s ease;
+	margin-top: 10px;
+}
+
+.submit-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
