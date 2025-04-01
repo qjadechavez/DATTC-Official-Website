@@ -527,6 +527,50 @@ header.scrolled {
 	font-size: 0.85rem;
 }
 
+.core-values-image-container {
+	position: relative;
+	margin: 2.5rem auto;
+	width: 250px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.core-values-image-container img {
+	width: 100%;
+	height: auto;
+	display: block;
+	margin: 0 auto;
+	border-radius: 8px;
+}
+
+.core-values-description {
+	margin-top: 1rem;
+	padding: 0.5rem;
+	text-align: center;
+	width: 100%;
+}
+
+.core-values-description h3 {
+	color: var(--primary);
+	margin: 0 0 0.5rem;
+	font-size: 1.3rem;
+}
+
+.core-values-description p {
+	color: #666;
+	margin: 0;
+	font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+	.core-values-image-container {
+		max-width: 400px;
+	}
+}
+
+/* ===== 8. PROGRAMS SECTION ===== */
 /* ===== 8. PROGRAMS SECTION ===== */
 .program-tabs {
 	display: flex;
@@ -2304,7 +2348,7 @@ header.scrolled {
 
 .form-group input:focus.invalid,
 .form-group textarea:focus.invalid,
-.form-group select:focus.invalid {
+form-group select:focus.invalid {
 	box-shadow: 0 0 0 2px rgba(255, 56, 96, 0.25);
 }
 
