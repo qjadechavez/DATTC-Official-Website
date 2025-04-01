@@ -162,7 +162,7 @@ app.post("/submit-contact", contactFormLimiter, async (req, res) => {
 		await transporter.sendMail(mailOptions);
 		await transporter.sendMail(confirmationEmail);
 
-		console.log("Form submitted successfully:", {name, email, program});
+		console.log("Form submitted successfully:", {name, phone, email, program, message});
 		res.redirect("/?formSubmitted=true");
 	} catch (error) {
 		console.error("Error processing contact form:", error);
