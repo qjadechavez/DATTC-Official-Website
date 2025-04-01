@@ -2260,14 +2260,14 @@ header.scrolled {
 
 .form-group input:focus.invalid,
 .form-group textarea:focus.invalid,
-form-group select:focus.invalid {
+.form-group select:focus.invalid {
 	box-shadow: 0 0 0 2px rgba(255, 56, 96, 0.25);
 }
 
 /* Valid input styling */
 .form-group input.valid,
 .form-group textarea.valid,
-form-group select.valid {
+.form-group select.valid {
 	border-color: #23d160;
 	background-color: rgba(35, 209, 96, 0.05);
 }
@@ -2468,4 +2468,32 @@ iframe[src*="recaptcha"],
 .contact form {
 	isolation: isolate;
 	position: relative;
+}
+
+/* reCAPTCHA Container Styling */
+.recaptcha-container {
+	margin: 15px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.recaptcha-container small {
+	margin-top: 5px;
+	color: #666;
+	font-size: 12px;
+}
+
+/* reCAPTCHA Badge Styling - Non-sticky version */
+.g-recaptcha {
+	position: relative;
+	z-index: 100;
+	margin: 0 auto 5px auto;
+	width: fit-content;
+}
+
+.grecaptcha-badge {
+	margin: 0 auto !important;
+	position: static !important;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.1) !important;
 }

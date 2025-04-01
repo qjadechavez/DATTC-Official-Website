@@ -10,6 +10,7 @@
 		id="contactForm"
 		action="/submit-contact"
 		method="POST"
+		novalidate
 	>
 		<div class="form-row">
 			<div class="form-group">
@@ -23,6 +24,10 @@
 					name="name"
 					required
 				/>
+				<span
+					class="error-message"
+					id="name-error"
+				></span>
 			</div>
 
 			<div class="form-group">
@@ -36,6 +41,10 @@
 					name="email"
 					required
 				/>
+				<span
+					class="error-message"
+					id="email-error"
+				></span>
 			</div>
 		</div>
 
@@ -51,19 +60,31 @@
 					name="phone"
 					required
 				/>
+				<span
+					class="error-message"
+					id="phone-error"
+				></span>
 			</div>
 
 			<div class="form-group">
-				<label for="program">Program of Interest</label>
+				<label for="program">
+					Program of Interest
+					<span class="required">*</span>
+				</label>
 				<select
 					id="program"
 					name="program"
+					required
 				>
 					<option value="">Select a Program</option>
 					<% const programs = [ "2D Animation NCIII", "Contact Center Services NCII", "Programming (Java) NCIII", "Stenography", "Adobe Photoshop", "Video Graphics", "Other" ] %> <% programs.forEach(program => { %>
 					<option value="<%= program %>"><%= program %></option>
 					<% }) %>
 				</select>
+				<span
+					class="error-message"
+					id="program-error"
+				></span>
 			</div>
 		</div>
 
@@ -78,7 +99,25 @@
 				rows="5"
 				required
 			></textarea>
+			<span
+				class="error-message"
+				id="message-error"
+			></span>
 		</div>
+
+		<!-- reCAPTCHA container positioned in the form -->
+		<div class="form-group recaptcha-container">
+			<div
+				class="g-recaptcha"
+				id="recaptcha-container"
+			></div>
+			<small>This site is protected by reCAPTCHA</small>
+			<span
+				class="error-message"
+				id="recaptcha-error"
+			></span>
+		</div>
+
 		<div class="form-group">
 			<button
 				type="submit"
@@ -98,9 +137,129 @@
 
 <script src="https://www.google.com/recaptcha/api.js?render=6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4"></script>
 <script>
+	// Form validation function
+	function validateForm() {
+		let isValid = true;
+
+		// Reset all error messages
+		document.querySelectorAll(".error-message").forEach((el) => {
+			el.style.display = "none";
+			el.textContent = "";
+		});
+
+		// Validate name (required)
+		const name = document.getElementById("name");
+		if (!name.value.trim()) {
+			document.getElementById("name-error").textContent = "Name is required";
+			document.getElementById("name-error").style.display = "block";
+			name.classList.add("invalid");
+			isValid = false;
+		} else if (name.value.trim().length < 2) {
+			document.getElementById("name-error").textContent = "Name must be at least 2 characters";
+			document.getElementById("name-error").style.display = "block";
+			name.classList.add("invalid");
+			isValid = false;
+		} else {
+			name.classList.remove("invalid");
+			name.classList.add("valid");
+		}
+
+		// Validate email (required and format)
+		const email = document.getElementById("email");
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!email.value.trim()) {
+			document.getElementById("email-error").textContent = "Email is required";
+			document.getElementById("email-error").style.display = "block";
+			email.classList.add("invalid");
+			isValid = false;
+		} else if (!emailRegex.test(email.value.trim())) {
+			document.getElementById("email-error").textContent = "Please enter a valid email address";
+			document.getElementById("email-error").style.display = "block";
+			email.classList.add("invalid");
+			isValid = false;
+		} else {
+			email.classList.remove("invalid");
+			email.classList.add("valid");
+		}
+
+		// Validate phone (required and format)
+		const phone = document.getElementById("phone");
+		const phoneRegex = /^[0-9\+\-\(\)\s]{7,20}$/;
+		if (!phone.value.trim()) {
+			document.getElementById("phone-error").textContent = "Phone number is required";
+			document.getElementById("phone-error").style.display = "block";
+			phone.classList.add("invalid");
+			isValid = false;
+		} else if (!phoneRegex.test(phone.value.trim())) {
+			document.getElementById("phone-error").textContent = "Please enter a valid phone number";
+			document.getElementById("phone-error").style.display = "block";
+			phone.classList.add("invalid");
+			isValid = false;
+		} else {
+			phone.classList.remove("invalid");
+			phone.classList.add("valid");
+		}
+
+		// Validate program selection (required)
+		const program = document.getElementById("program");
+		if (!program.value) {
+			document.getElementById("program-error").textContent = "Please select a program";
+			document.getElementById("program-error").style.display = "block";
+			program.classList.add("invalid");
+			isValid = false;
+		} else {
+			program.classList.remove("invalid");
+			program.classList.add("valid");
+		}
+
+		// Validate message (required and minimum length)
+		const message = document.getElementById("message");
+		if (!message.value.trim()) {
+			document.getElementById("message-error").textContent = "Message is required";
+			document.getElementById("message-error").style.display = "block";
+			message.classList.add("invalid");
+			isValid = false;
+		} else if (message.value.trim().length < 10) {
+			document.getElementById("message-error").textContent = "Message must be at least 10 characters";
+			document.getElementById("message-error").style.display = "block";
+			message.classList.add("invalid");
+			isValid = false;
+		} else {
+			message.classList.remove("invalid");
+			message.classList.add("valid");
+		}
+
+		return isValid;
+	}
+
+	// Add input event listeners to clear errors on typing
+	document.querySelectorAll("#contactForm input, #contactForm textarea, #contactForm select").forEach((el) => {
+		el.addEventListener("input", function () {
+			const errorId = this.id + "-error";
+			const errorElement = document.getElementById(errorId);
+			if (errorElement) {
+				errorElement.style.display = "none";
+				this.classList.remove("invalid");
+			}
+		});
+	});
+
+	// Form submission handler with validation
 	document.getElementById("contactForm").addEventListener("submit", function (event) {
 		event.preventDefault();
 
+		// Validate form first
+		if (!validateForm()) {
+			// Focus the first invalid field
+			const firstInvalid = document.querySelector(".invalid");
+			if (firstInvalid) {
+				firstInvalid.focus();
+				firstInvalid.scrollIntoView({behavior: "smooth", block: "center"});
+			}
+			return false;
+		}
+
+		// If form is valid, proceed with reCAPTCHA and submission
 		grecaptcha.ready(function () {
 			grecaptcha.execute("6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4", {action: "submit"}).then(function (token) {
 				document.getElementById("g-recaptcha-response").value = token;
