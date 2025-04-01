@@ -3,24 +3,10 @@
 const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
-const dotenv = require("dotenv");
-const {RecaptchaV3} = require("express-recaptcha");
-const rateLimit = require("express-rate-limit");
-
+const axios = require("axios"); // You'll need to install axios
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Rate limiter configuration
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000,
-	max: 5,
-	message: "Too many requests from this IP, please try again later.",
-	standardHeaders: true,
-	legacyHeaders: false,
-});
-
-app.use("/submit-contact", limiter);
 
 // Middleware
 app.use(express.static(path.join(__dirname, "public")));
@@ -42,8 +28,6 @@ const transporter = nodemailer.createTransport({
 	},
 });
 
-const recaptcha = new RecaptchaV3(process.env.RECAPTCHA_SITE_KEY, process.env.RECAPTCHA_SECRET_KEY);
-
 // Routes
 app.get("/", (req, res) => {
 	const formSubmitted = req.query.formSubmitted === "true";
@@ -58,30 +42,38 @@ app.get("/", (req, res) => {
 // Contact form submission handler
 app.post("/submit-contact", async (req, res) => {
 	try {
-		const recaptchaResponse = req.body["g-recaptcha-response"];
+		const {name, email, phone, program, message, "g-recaptcha-response": recaptchaToken} = req.body;
+
+		console.log("Form submission received");
 
 		// Verify reCAPTCHA
-		const verificationURL = "https://www.google.com/recaptcha/api/siteverify";
-		const response = await fetch(verificationURL, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/x-www-form-urlencoded",
-			},
-			body: new URLSearchParams({
-				secret: process.env.RECAPTCHA_SECRET_KEY,
-				response: recaptchaResponse,
-			}),
-		});
-
-		const recaptchaData = await response.json();
-		console.log("reCAPTCHA verification response:", recaptchaData); // For debugging
-
-		// Check if reCAPTCHA validation passed
-		if (!recaptchaData.success || recaptchaData.score < 0.5) {
-			return res.status(400).send("Failed reCAPTCHA verification");
+		if (!recaptchaToken) {
+			console.error("No reCAPTCHA token provided");
+			return res.redirect("/?formError=true");
 		}
 
-		const {name, email, phone, program, message} = req.body;
+		console.log("reCAPTCHA token received:", recaptchaToken.substring(0, 10) + "...");
+
+		// Verify with Google reCAPTCHA API
+		const recaptchaVerifyUrl = "https://www.google.com/recaptcha/api/siteverify";
+		console.log("Verifying with reCAPTCHA API...");
+
+		const recaptchaResponse = await axios.post(recaptchaVerifyUrl, null, {
+			params: {
+				secret: process.env.RECAPTCHA_SECRET_KEY,
+				response: recaptchaToken,
+			},
+		});
+
+		console.log("reCAPTCHA API response:", recaptchaResponse.data);
+
+		// If verification failed
+		if (!recaptchaResponse.data.success) {
+			console.error("reCAPTCHA verification failed:", recaptchaResponse.data["error-codes"]);
+			return res.redirect("/?formError=true");
+		}
+
+		console.log("reCAPTCHA verification successful, sending emails...");
 
 		// Email content
 		const mailOptions = {
@@ -125,10 +117,10 @@ app.post("/submit-contact", async (req, res) => {
 		await transporter.sendMail(mailOptions);
 		await transporter.sendMail(confirmationEmail);
 
-		console.log("Form submitted and emails sent:", req.body);
+		console.log("Form submitted and emails sent successfully");
 		res.redirect("/?formSubmitted=true");
 	} catch (error) {
-		console.error("Error sending email:", error);
+		console.error("Error processing form submission:", error);
 		res.redirect("/?formError=true");
 	}
 });
@@ -136,4 +128,6 @@ app.post("/submit-contact", async (req, res) => {
 // Start server
 app.listen(port, () => {
 	console.log(`Server running on http://localhost:${port}`);
+	console.log(`Using reCAPTCHA site key: ${process.env.RECAPTCHA_SITE_KEY}`);
+	console.log(`Using reCAPTCHA secret key: ${process.env.RECAPTCHA_SECRET_KEY.substring(0, 5)}...`);
 });

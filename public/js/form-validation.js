@@ -107,6 +107,20 @@ document.querySelectorAll("#contactForm input, #contactForm textarea, #contactFo
 	});
 });
 
+// Make sure reCAPTCHA is available and working properly
+let recaptchaLoaded = false;
+
+// Check if reCAPTCHA is loaded
+window.onload = function () {
+	if (typeof grecaptcha !== "undefined") {
+		recaptchaLoaded = true;
+	} else {
+		console.error("reCAPTCHA not loaded. Check your internet connection and site key.");
+		document.getElementById("recaptcha-error").textContent = "reCAPTCHA could not be loaded. Please refresh the page.";
+		document.getElementById("recaptcha-error").style.display = "block";
+	}
+};
+
 // Form submission handler with validation
 document.getElementById("contactForm").addEventListener("submit", function (event) {
 	event.preventDefault();
@@ -128,28 +142,47 @@ document.getElementById("contactForm").addEventListener("submit", function (even
 	submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 	submitBtn.disabled = true;
 
+	// Check if reCAPTCHA is loaded
+	if (!recaptchaLoaded) {
+		submitBtn.innerHTML = originalBtnText;
+		submitBtn.disabled = false;
+		document.getElementById("recaptcha-error").textContent = "reCAPTCHA verification is required. Please refresh the page.";
+		document.getElementById("recaptcha-error").style.display = "block";
+		return false;
+	}
+
 	// If form is valid, proceed with reCAPTCHA verification
-	grecaptcha.ready(function () {
-		// Show loading indicator or disable submit button here if desired
+	try {
+		grecaptcha.ready(function () {
+			grecaptcha
+				.execute("6Ld6lQYrAAAAAOBSzF6b1BsSxcwDeoTl1TDlsIrF", {action: "submit"})
+				.then(function (token) {
+					// Set the token value in the hidden field
+					document.getElementById("g-recaptcha-response").value = token;
 
-		grecaptcha
-			.execute("6LeeEwYrAAAAAE4K-FnydQh_pM_IIj6bIHLIyZZ4", {action: "submit"})
-			.then(function (token) {
-				// Set the token value in the hidden field
-				document.getElementById("g-recaptcha-response").value = token;
+					// Debug - log token to console
+					console.log("reCAPTCHA token generated:", token.substring(0, 10) + "...");
 
-				// Submit the form
-				document.getElementById("contactForm").submit();
-			})
-			.catch(function (error) {
-				// Restore button state
-				submitBtn.innerHTML = originalBtnText;
-				submitBtn.disabled = false;
+					// Submit the form
+					document.getElementById("contactForm").submit();
+				})
+				.catch(function (error) {
+					// Restore button state
+					submitBtn.innerHTML = originalBtnText;
+					submitBtn.disabled = false;
 
-				// Handle reCAPTCHA errors
-				document.getElementById("recaptcha-error").textContent = "reCAPTCHA verification failed. Please try again.";
-				document.getElementById("recaptcha-error").style.display = "block";
-				console.error("reCAPTCHA error:", error);
-			});
-	});
+					// Handle reCAPTCHA errors
+					document.getElementById("recaptcha-error").textContent = "reCAPTCHA verification failed. Please try again.";
+					document.getElementById("recaptcha-error").style.display = "block";
+					console.error("reCAPTCHA error:", error);
+				});
+		});
+	} catch (error) {
+		// Fallback for any errors
+		submitBtn.innerHTML = originalBtnText;
+		submitBtn.disabled = false;
+		document.getElementById("recaptcha-error").textContent = "Error processing form. Please try again.";
+		document.getElementById("recaptcha-error").style.display = "block";
+		console.error("Form submission error:", error);
+	}
 });
