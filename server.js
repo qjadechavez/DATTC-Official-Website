@@ -4,6 +4,7 @@ const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
 const axios = require("axios"); // You'll need to install axios
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -12,6 +13,7 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
+ape.use(limiter)
 
 // Set view engine
 app.set("view engine", "ejs");
@@ -27,6 +29,14 @@ const transporter = nodemailer.createTransport({
 		pass: process.env.EMAIL_PASS,
 	},
 });
+
+// rate limiter
+const limiter = rateLimit ({
+	windowsMs: 15 * 60 * 1000, 
+	limit: 100, 
+	standardHeader: 'draft-8',
+	legacyHeaders: false,
+})
 
 // Routes
 app.get("/", (req, res) => {
