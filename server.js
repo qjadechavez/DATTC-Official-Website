@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-ape.use(limiter)
+app.use(limiter);
 
 // Set view engine
 app.set("view engine", "ejs");
@@ -31,12 +31,12 @@ const transporter = nodemailer.createTransport({
 });
 
 // rate limiter
-const limiter = rateLimit ({
-	windowsMs: 15 * 60 * 1000, 
-	limit: 100, 
-	standardHeader: 'draft-8',
+const limiter = rateLimit({
+	windowsMs: 15 * 60 * 1000,
+	limit: 100,
+	standardHeader: "draft-8",
 	legacyHeaders: false,
-})
+});
 
 // Routes
 app.get("/", (req, res) => {
