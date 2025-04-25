@@ -4,7 +4,7 @@ const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
 const axios = require("axios"); // You'll need to install axios
-const rateLimit = require("express-rate-limit");
+const rateLimit = require("express-rate-limit"); // Add rate limit package
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,7 +13,6 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
-app.use(limiter);
 
 // Set view engine
 app.set("view engine", "ejs");
@@ -23,34 +22,41 @@ app.set("views", path.join(__dirname, "views"));
 const transporter = nodemailer.createTransport({
 	host: process.env.EMAIL_HOST,
 	port: process.env.EMAIL_PORT,
-	secure: false, // true for 465, false for other ports
+	secure: false,
 	auth: {
 		user: process.env.EMAIL_USER,
 		pass: process.env.EMAIL_PASS,
 	},
 });
 
-// rate limiter
-const limiter = rateLimit({
-	windowsMs: 15 * 60 * 1000,
-	limit: 100,
-	standardHeader: "draft-8",
-	legacyHeaders: false,
+// Configure rate limiter
+const contactFormLimiter = rateLimit({
+	windowMs: 24 * 60 * 60 * 1000, // 24 hours
+	max: 3,
+	message: "Too many inquiries submitted from this IP, please try again after 24 hours",
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	handler: (req, res) => {
+		console.log(`Rate limit exceeded for IP: ${req.ip}`);
+		return res.redirect("/?formError=true&message=rateLimit");
+	},
 });
 
 // Routes
 app.get("/", (req, res) => {
 	const formSubmitted = req.query.formSubmitted === "true";
 	const formError = req.query.formError === "true";
+	const message = req.query.message;
 	res.render("index", {
 		title: "Digital Arts Technology Training Center Inc.",
 		formSubmitted,
 		formError,
+		message,
 	});
 });
 
 // Contact form submission handler
-app.post("/submit-contact", async (req, res) => {
+app.post("/submit-contact", contactFormLimiter, async (req, res) => {
 	try {
 		const {name, email, phone, program, message, "g-recaptcha-response": recaptchaToken} = req.body;
 
@@ -77,7 +83,6 @@ app.post("/submit-contact", async (req, res) => {
 
 		console.log("reCAPTCHA API response:", recaptchaResponse.data);
 
-		// If verification failed
 		if (!recaptchaResponse.data.success) {
 			console.error("reCAPTCHA verification failed:", recaptchaResponse.data["error-codes"]);
 			return res.redirect("/?formError=true");
