@@ -3,7 +3,8 @@
 const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
-const axios = require("axios"); // You'll need to install axios
+const axios = require("axios");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -21,10 +22,23 @@ app.set("views", path.join(__dirname, "views"));
 const transporter = nodemailer.createTransport({
 	host: process.env.EMAIL_HOST,
 	port: process.env.EMAIL_PORT,
-	secure: false, // true for 465, false for other ports
+	secure: false,
 	auth: {
 		user: process.env.EMAIL_USER,
 		pass: process.env.EMAIL_PASS,
+	},
+});
+
+// Configure rate limiter
+const contactFormLimiter = rateLimit({
+	windowMs: 24 * 60 * 60 * 1000, // 24 hours
+	max: 3,
+	message: "Too many inquiries submitted from this IP, please try again after 24 hours",
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	handler: (req, res) => {
+		console.log(`Rate limit exceeded for IP: ${req.ip}`);
+		return res.redirect("/?formError=true&message=rateLimit");
 	},
 });
 
@@ -32,15 +46,17 @@ const transporter = nodemailer.createTransport({
 app.get("/", (req, res) => {
 	const formSubmitted = req.query.formSubmitted === "true";
 	const formError = req.query.formError === "true";
+	const message = req.query.message;
 	res.render("index", {
 		title: "Digital Arts Technology Training Center Inc.",
 		formSubmitted,
 		formError,
+		message,
 	});
 });
 
 // Contact form submission handler
-app.post("/submit-contact", async (req, res) => {
+app.post("/submit-contact", contactFormLimiter, async (req, res) => {
 	try {
 		const {name, email, phone, program, message, "g-recaptcha-response": recaptchaToken} = req.body;
 
@@ -67,7 +83,6 @@ app.post("/submit-contact", async (req, res) => {
 
 		console.log("reCAPTCHA API response:", recaptchaResponse.data);
 
-		// If verification failed
 		if (!recaptchaResponse.data.success) {
 			console.error("reCAPTCHA verification failed:", recaptchaResponse.data["error-codes"]);
 			return res.redirect("/?formError=true");
