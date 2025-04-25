@@ -3,8 +3,8 @@
 const express = require("express");
 const path = require("path");
 const nodemailer = require("nodemailer");
-const axios = require("axios"); // You'll need to install axios
-const rateLimit = require("express-rate-limit"); // Add rate limit package
+const axios = require("axios");
+const rateLimit = require("express-rate-limit");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
