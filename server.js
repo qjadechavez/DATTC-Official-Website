@@ -59,7 +59,14 @@ app.get("/", (req, res) => {
 // Contact form submission handler
 app.post("/submit-contact", contactFormLimiter, async (req, res) => {
 	try {
-		const {name, email, phone, program, message, "g-recaptcha-response": recaptchaToken} = req.body;
+		const {name: rawName, email: rawEmail, phone: rawPhone, program: rawProgram, message: rawMessage, "g-recaptcha-response": recaptchaToken} = req.body;
+
+		// Sanitize all user inputs to prevent XSS attacks
+		const name = xss(rawName);
+		const email = xss(rawEmail);
+		const phone = xss(rawPhone);
+		const program = xss(rawProgram);
+		const message = xss(rawMessage);
 
 		console.log("Form submission received");
 
