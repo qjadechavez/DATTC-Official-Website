@@ -34,7 +34,7 @@ const contactFormLimiter = rateLimit({
 	windowMs: 24 * 60 * 60 * 1000, // 24 hours
 	max: 3,
 	message: "Too many inquiries submitted from this IP, please try again after 24 hours",
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	standardHeaders: true,
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 	handler: (req, res) => {
 		console.log(`Rate limit exceeded for IP: ${req.ip}`);
