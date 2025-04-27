@@ -31,7 +31,7 @@ const transporter = nodemailer.createTransport({
 
 // Configure rate limiter
 const contactFormLimiter = rateLimit({
-	windowMs: 24 * 60 * 60 * 1000, // 24 hours
+	windowMs: 24 * 60 * 60 * 1000,
 	max: 3,
 	message: "Too many inquiries submitted from this IP, please try again after 24 hours",
 	standardHeaders: true,
