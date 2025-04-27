@@ -32,11 +32,11 @@ const transporter = nodemailer.createTransport({
 
 // Configure rate limiter
 const contactFormLimiter = rateLimit({
-	windowMs: 24 * 60 * 60 * 1000, // 24 hours
+	windowMs: 24 * 60 * 60 * 1000,
 	max: 3,
 	message: "Too many inquiries submitted from this IP, please try again after 24 hours",
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	standardHeaders: true,
+	legacyHeaders: false,
 	handler: (req, res) => {
 		console.log(`Rate limit exceeded for IP: ${req.ip}`);
 		return res.redirect("/?formError=true&message=rateLimit");
