@@ -5,6 +5,7 @@ const path = require("path");
 const nodemailer = require("nodemailer");
 const axios = require("axios");
 const rateLimit = require("express-rate-limit");
+const xss = require("xss");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
