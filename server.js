@@ -5,6 +5,7 @@ const path = require("path");
 const nodemailer = require("nodemailer");
 const axios = require("axios");
 const rateLimit = require("express-rate-limit");
+const xss = require("xss");
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,11 +32,11 @@ const transporter = nodemailer.createTransport({
 
 // Configure rate limiter
 const contactFormLimiter = rateLimit({
-	windowMs: 24 * 60 * 60 * 1000, // 24 hours
+	windowMs: 24 * 60 * 60 * 1000,
 	max: 3,
 	message: "Too many inquiries submitted from this IP, please try again after 24 hours",
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+	standardHeaders: true,
+	legacyHeaders: false,
 	handler: (req, res) => {
 		console.log(`Rate limit exceeded for IP: ${req.ip}`);
 		return res.redirect("/?formError=true&message=rateLimit");
@@ -58,7 +59,14 @@ app.get("/", (req, res) => {
 // Contact form submission handler
 app.post("/submit-contact", contactFormLimiter, async (req, res) => {
 	try {
-		const {name, email, phone, program, message, "g-recaptcha-response": recaptchaToken} = req.body;
+		const {name: rawName, email: rawEmail, phone: rawPhone, program: rawProgram, message: rawMessage, "g-recaptcha-response": recaptchaToken} = req.body;
+
+		// Sanitize all user inputs to prevent XSS attacks
+		const name = xss(rawName);
+		const email = xss(rawEmail);
+		const phone = xss(rawPhone);
+		const program = xss(rawProgram);
+		const message = xss(rawMessage);
 
 		console.log("Form submission received");
 
