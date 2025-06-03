@@ -10,8 +10,9 @@
  * 6. About Section
  * 7. Core Values Section
  * 8. Programs Section
- * 9. Parallax Effects
- * 10. Media Queries
+ * 9. Testimonials Section
+ * 10. Parallax Effects
+ * 11. Media Queries
  */
 
 /* ===== 1. ROOT VARIABLES ===== */
@@ -2563,4 +2564,234 @@ form-group select:focus.invalid {
 .submit-btn:hover {
 	transform: translateY(-2px);
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== TESTIMONIALS SECTION ===== */
+.testimonials {
+    background-color: #f5f7fa;
+    padding: 70px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background decoration for Testimonials section */
+.testimonials::before,
+.testimonials::after {
+    content: "";
+    position: absolute;
+    background-color: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.testimonials::before {
+    width: 400px;
+    height: 400px;
+    top: -150px;
+    left: -200px;
+}
+
+.testimonials::after {
+    width: 350px;
+    height: 350px;
+    bottom: -100px;
+    right: -150px;
+}
+
+.testimonials .section-title {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 50px;
+}
+
+/* Testimonial Carousel Container */
+.testimonial-carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+    z-index: 1;
+}
+
+/* Testimonial Carousel */
+.testimonial-carousel {
+    display: flex;
+    width: calc(300px * 9); /* Width of each card * number of cards (6 + 3 duplicates for infinite scroll) */
+    animation: scroll 40s linear infinite;
+}
+
+.testimonial-carousel:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-300px * 6)); /* Width of each card * number of original cards */
+    }
+}
+
+/* Testimonial Card */
+.testimonial-card {
+    flex: 0 0 300px;
+    height: 320px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 25px;
+    margin-right: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Testimonial Image */
+.testimonial-image {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 15px;
+    border: 3px solid var(--secondary);
+}
+
+.testimonial-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Testimonial Content */
+.testimonial-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-rating {
+    color: #ffc107;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.testimonial-content p {
+    flex: 1;
+    font-style: italic;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.testimonial-content p::before {
+    content: """;
+    font-size: 3rem;
+    color: rgba(52, 152, 219, 0.1);
+    position: absolute;
+    top: -20px;
+    left: -10px;
+    z-index: -1;
+}
+
+.testimonial-content h4 {
+    font-size: 1rem;
+    color: var(--primary);
+    margin: 0 0 5px;
+}
+
+.testimonial-content span {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Facebook badge for testimonials */
+.testimonial-card {
+    position: relative;
+}
+
+.testimonial-fb-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 30px;
+    height: 30px;
+    background-color: #1877f2;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.testimonial-fb-badge i {
+    font-size: 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(calc(-280px * 6));
+        }
+    }
+    
+    .testimonial-card {
+        flex: 0 0 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .testimonials {
+        padding: 50px 0;
+    }
+    
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(calc(-260px * 6));
+        }
+    }
+    
+    .testimonial-card {
+        flex: 0 0 260px;
+        height: 340px;
+    }
+}
+
+@media (max-width: 576px) {
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(calc(-240px * 6));
+        }
+    }
+    
+    .testimonial-card {
+        flex: 0 0 240px;
+        height: 360px;
+        margin-right: 15px;
+        padding: 20px;
+    }
+    
+    .testimonial-image {
+        width: 60px;
+        height: 60px;
+    }
 }
