@@ -1997,29 +1997,7 @@ header.scrolled {
 	overflow: hidden;
 }
 
-/* Background decoration for Contact section */
-.contact::before,
-.contact::after {
-	content: "";
-	position: absolute;
-	background-color: rgba(52, 152, 219, 0.1);
-	border-radius: 50%;
-	z-index: 0;
-}
 
-.contact::before {
-	width: 400px;
-	height: 400px;
-	top: -200px;
-	right: -150px;
-}
-
-.contact::after {
-	width: 350px;
-	height: 350px;
-	bottom: -150px;
-	left: -100px;
-}
 
 .contact .section-title {
 	margin-bottom: 40px;
