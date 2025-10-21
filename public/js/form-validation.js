@@ -131,7 +131,7 @@ document.getElementById("contactForm").addEventListener("submit", function (even
 		const firstInvalid = document.querySelector(".invalid");
 		if (firstInvalid) {
 			firstInvalid.focus();
-			firstInvalid.scrollIntoView({behavior: "smooth", block: "center"});
+			firstInvalid.scrollIntoView({ behavior: "smooth", block: "center" });
 		}
 		return false;
 	}
@@ -155,7 +155,7 @@ document.getElementById("contactForm").addEventListener("submit", function (even
 	try {
 		grecaptcha.ready(function () {
 			grecaptcha
-				.execute("6Ld6lQYrAAAAAOBSzF6b1BsSxcwDeoTl1TDlsIrF", {action: "submit"})
+				.execute("6Ld6lQYrAAAAAOBSzF6b1BsSxcwDeoTl1TDlsIrF", { action: "submit" })
 				.then(function (token) {
 					// Set the token value in the hidden field
 					document.getElementById("g-recaptcha-response").value = token;
