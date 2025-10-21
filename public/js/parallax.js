@@ -124,8 +124,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	// Add event listeners
-	window.addEventListener("scroll", onScroll, {passive: true});
-	window.addEventListener("resize", onResize, {passive: true});
+	window.addEventListener("scroll", onScroll, { passive: true });
+	window.addEventListener("resize", onResize, { passive: true });
 
 	// Initialize on page load
 	setTimeout(() => {

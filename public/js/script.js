@@ -383,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			// Scroll to the success message
 			const formMessage = document.querySelector(".form-message");
 			if (formMessage) {
-				formMessage.scrollIntoView({behavior: "smooth", block: "center"});
+				formMessage.scrollIntoView({ behavior: "smooth", block: "center" });
 			}
 
 			// Remove the parameter from the URL without refreshing the page
@@ -552,7 +552,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				// Scroll to first error
 				if (firstError) {
 					firstError.focus();
-					firstError.scrollIntoView({behavior: "smooth", block: "center"});
+					firstError.scrollIntoView({ behavior: "smooth", block: "center" });
 				}
 			}
 		});
